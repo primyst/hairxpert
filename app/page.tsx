@@ -1,13 +1,16 @@
 "use client";
 
-import { useEffect, useRef, useState, useCallback } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import {
   motion,
   useScroll,
   useTransform,
   AnimatePresence,
   useInView,
+  type Variants,
 } from "framer-motion";
+
+type EaseCubicBezier = [number, number, number, number];
 import {
   Scissors,
   Sparkles,
@@ -166,16 +169,18 @@ const AVAILABLE_SLOTS = [
 // ANIMATION VARIANTS
 // ─────────────────────────────────────────────────────────────
 
-const fadeUp = {
+const EASE_OUT: EaseCubicBezier = [0.16, 1, 0.3, 1];
+
+const fadeUp: Variants = {
   hidden: { opacity: 0, y: 32 },
   visible: (i: number = 0) => ({
     opacity: 1,
     y: 0,
-    transition: { duration: 0.75, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] },
+    transition: { duration: 0.75, delay: i * 0.1, ease: EASE_OUT },
   }),
 };
 
-const fadeIn = {
+const fadeIn: Variants = {
   hidden: { opacity: 0 },
   visible: (i: number = 0) => ({
     opacity: 1,
@@ -183,7 +188,7 @@ const fadeIn = {
   }),
 };
 
-const stagger = {
+const stagger: Variants = {
   hidden: {},
   visible: { transition: { staggerChildren: 0.1, delayChildren: 0.05 } },
 };
@@ -261,7 +266,7 @@ function Navbar() {
       <motion.header
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+        transition={{ duration: 0.7, ease: EASE_OUT }}
         className={`fixed top-0 inset-x-0 z-50 transition-all duration-500 ${
           scrolled
             ? "bg-zinc-950/92 backdrop-blur-2xl border-b border-white/5 shadow-[0_4px_40px_rgba(0,0,0,0.5)]"
@@ -1099,7 +1104,7 @@ function Testimonials() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                transition={{ duration: 0.5, ease: EASE_OUT }}
                 className="relative"
               >
                 <div className="flex justify-center gap-1 mb-8">
