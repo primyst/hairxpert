@@ -368,7 +368,7 @@ function Hero() {
   const contentOpacity = useTransform(scrollY, [0, 380], [1, 0]);
 
   return (
-    <section className="relative h-screen min-h-[720px] overflow-hidden flex items-center justify-center">
+    <section className="relative h-screen min-h-[720px] overflow-hidden flex items-center justify-center pt-12">
       {/* Parallax background layer */}
       <motion.div style={{ y: bgY }} className="absolute inset-0 scale-[1.15]">
         <div className="absolute inset-0 bg-gradient-to-b from-zinc-950 via-stone-900 to-zinc-950" />
