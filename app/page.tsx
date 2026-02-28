@@ -97,6 +97,7 @@ const STYLISTS = [
     specialty: "Master Barber",
     years: 12,
     initials: "AO",
+    image: "/adewale.jpg",
     accentFrom: "from-amber-700",
     accentTo: "to-stone-900",
     clients: "1.2k+",
@@ -106,6 +107,7 @@ const STYLISTS = [
     specialty: "Color Specialist",
     years: 8,
     initials: "CE",
+    image: "/chioma.jpg",
     accentFrom: "from-rose-900",
     accentTo: "to-zinc-900",
     clients: "900+",
@@ -115,6 +117,7 @@ const STYLISTS = [
     specialty: "Luxury Treatments",
     years: 10,
     initials: "TB",
+    image: "/tunde.jpg",
     accentFrom: "from-teal-900",
     accentTo: "to-zinc-950",
     clients: "1.0k+",
@@ -124,6 +127,7 @@ const STYLISTS = [
     specialty: "Precision Cuts",
     years: 6,
     initials: "NA",
+    image: "/ngozi.jpg",
     accentFrom: "from-violet-900",
     accentTo: "to-zinc-900",
     clients: "800+",
@@ -368,29 +372,37 @@ function Hero() {
   const contentOpacity = useTransform(scrollY, [0, 380], [1, 0]);
 
   return (
-    <section className="relative h-screen min-h-[720px] overflow-hidden flex items-center justify-center pt-12">
+    <section className="relative h-screen min-h-[720px] overflow-hidden flex items-center justify-center">
       {/* Parallax background layer */}
       <motion.div style={{ y: bgY }} className="absolute inset-0 scale-[1.15]">
-        <div className="absolute inset-0 bg-gradient-to-b from-zinc-950 via-stone-900 to-zinc-950" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_65%_55%_at_20%_65%,rgba(217,119,6,0.18),transparent)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_40%_40%_at_80%_20%,rgba(245,158,11,0.07),transparent)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_100%_100%_at_50%_50%,transparent_40%,rgba(0,0,0,0.65)_100%)]" />
-        {/* Grain */}
+        {/* Hero photo — place /public/hero.jpg (barber at work) */}
+        <img
+          src="/hero.jpg"
+          alt="Barber at work"
+          className="absolute inset-0 w-full h-full object-cover object-center"
+        />
+        {/* Dark base fallback if image hasn't loaded */}
+        <div className="absolute inset-0 bg-zinc-950" style={{ zIndex: -1 }} />
+
+        {/* Multi-layer overlay for cinematic readability */}
+        {/* Layer 1 — deep dark base: 50% opacity black */}
+        <div className="absolute inset-0 bg-black/50" />
+        {/* Layer 2 — directional gradient: darker at top + bottom, lighter mid */}
+        <div className="absolute inset-0 bg-gradient-to-b from-zinc-950/80 via-zinc-950/20 to-zinc-950/90" />
+        {/* Layer 3 — amber warm tint left-center for luxury feel */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_65%_55%_at_20%_65%,rgba(217,119,6,0.22),transparent)]" />
+        {/* Layer 4 — vignette edges */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_100%_100%_at_50%_50%,transparent_35%,rgba(0,0,0,0.75)_100%)]" />
+
+        {/* Grain texture on top of image */}
         <div
-          className="absolute inset-0 opacity-[0.17]"
+          className="absolute inset-0 opacity-[0.12]"
           style={{
             backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E")`,
           }}
         />
-        {/* Watermark scissors */}
-        <div className="absolute inset-0 flex items-center justify-end pr-10 pointer-events-none">
-          <Scissors
-            className="w-[55vw] h-[55vw] max-w-[680px] text-amber-500/[0.035] rotate-[-15deg]"
-            strokeWidth={0.4}
-          />
-        </div>
         {/* Thin gold horizontal line */}
-        <div className="absolute top-1/2 left-0 right-0 h-px bg-gradient-to-r from-transparent via-amber-500/12 to-transparent" />
+        <div className="absolute top-1/2 left-0 right-0 h-px bg-gradient-to-r from-transparent via-amber-500/15 to-transparent" />
       </motion.div>
 
       {/* Content */}
@@ -588,25 +600,62 @@ function About() {
       <div className="relative max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
         {/* Image collage */}
         <motion.div variants={fadeUp} className="relative h-[480px] md:h-[560px]">
-          <div className="absolute left-0 top-0 w-[58%] h-[70%] rounded-2xl overflow-hidden border border-zinc-800 bg-gradient-to-br from-stone-800 via-zinc-900 to-zinc-950">
+          {/* Panel 1 — large, top-left: gallery1.jpg */}
+          <div className="absolute left-0 top-0 w-[58%] h-[70%] rounded-2xl overflow-hidden border border-zinc-800 bg-zinc-900">
+            <img
+              src="/gallery1.jpg"
+              alt="Salon atmosphere"
+              className="absolute inset-0 w-full h-full object-cover object-center"
+              onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }}
+            />
+            {/* Dark overlay so icon stays visible */}
+            <div className="absolute inset-0 bg-zinc-950/55" />
+            {/* Icon on top */}
             <div className="absolute inset-0 flex items-center justify-center">
-              <Scissors className="w-24 h-24 text-amber-700/20 rotate-45" strokeWidth={0.8} />
+              <Scissors className="w-24 h-24 text-amber-400/30 rotate-45 drop-shadow-lg" strokeWidth={0.8} />
             </div>
-            <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/50 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/60 to-transparent" />
           </div>
-          <div className="absolute right-0 top-0 w-[38%] h-[46%] rounded-2xl overflow-hidden border border-zinc-800 bg-gradient-to-br from-amber-950/40 via-zinc-900 to-zinc-950">
+
+          {/* Panel 2 — top-right: gallery2.jpg */}
+          <div className="absolute right-0 top-0 w-[38%] h-[46%] rounded-2xl overflow-hidden border border-zinc-800 bg-zinc-900">
+            <img
+              src="/gallery2.jpg"
+              alt="Hair coloring"
+              className="absolute inset-0 w-full h-full object-cover object-center"
+              onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }}
+            />
+            <div className="absolute inset-0 bg-zinc-950/55" />
             <div className="absolute inset-0 flex items-center justify-center">
-              <Sparkles className="w-14 h-14 text-amber-700/20" />
+              <Sparkles className="w-14 h-14 text-amber-400/30 drop-shadow-lg" />
             </div>
           </div>
-          <div className="absolute right-0 bottom-0 w-[38%] h-[46%] rounded-2xl overflow-hidden border border-zinc-800 bg-gradient-to-br from-zinc-800 to-zinc-950">
+
+          {/* Panel 3 — bottom-right: gallery3.jpg */}
+          <div className="absolute right-0 bottom-0 w-[38%] h-[46%] rounded-2xl overflow-hidden border border-zinc-800 bg-zinc-900">
+            <img
+              src="/gallery3.jpg"
+              alt="Precision styling"
+              className="absolute inset-0 w-full h-full object-cover object-center"
+              onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }}
+            />
+            <div className="absolute inset-0 bg-zinc-950/55" />
             <div className="absolute inset-0 flex items-center justify-center">
-              <Palette className="w-14 h-14 text-amber-700/20" />
+              <Palette className="w-14 h-14 text-amber-400/30 drop-shadow-lg" />
             </div>
           </div>
-          <div className="absolute left-0 bottom-0 w-[38%] h-[26%] rounded-2xl overflow-hidden border border-amber-500/20 bg-gradient-to-br from-amber-950/30 to-zinc-900">
+
+          {/* Panel 4 — bottom-left accent: gallery4.jpg */}
+          <div className="absolute left-0 bottom-0 w-[38%] h-[26%] rounded-2xl overflow-hidden border border-amber-500/25 bg-zinc-900">
+            <img
+              src="/gallery4.jpg"
+              alt="VIP treatment"
+              className="absolute inset-0 w-full h-full object-cover object-center"
+              onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }}
+            />
+            <div className="absolute inset-0 bg-zinc-950/60" />
             <div className="absolute inset-0 flex items-center justify-center">
-              <Gem className="w-10 h-10 text-amber-600/25" />
+              <Gem className="w-10 h-10 text-amber-400/35 drop-shadow-lg" />
             </div>
           </div>
 
@@ -655,12 +704,18 @@ function About() {
           >
             <div className="flex items-center gap-2">
               <div className="flex -space-x-1.5">
-                {["AO", "CE", "TB"].map((init, i) => (
+                {STYLISTS.slice(0, 3).map(({ initials, name, image, accentFrom, accentTo }, i) => (
                   <div
                     key={i}
-                    className="w-7 h-7 rounded-full bg-gradient-to-br from-amber-600 to-stone-900 border-2 border-zinc-900 flex items-center justify-center text-[9px] font-bold text-white"
+                    className={`w-7 h-7 rounded-full bg-gradient-to-br ${accentFrom} ${accentTo} border-2 border-zinc-900 flex items-center justify-center text-[9px] font-bold text-white overflow-hidden relative`}
                   >
-                    {init}
+                    <img
+                      src={image}
+                      alt={name}
+                      className="absolute inset-0 w-full h-full object-cover object-top"
+                      onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }}
+                    />
+                    <span className="relative z-10 text-[9px] font-bold">{initials}</span>
                   </div>
                 ))}
               </div>
@@ -828,7 +883,7 @@ function Stylists() {
         </div>
 
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6">
-          {STYLISTS.map(({ name, specialty, years, initials, accentFrom, accentTo, clients }, i) => (
+          {STYLISTS.map(({ name, specialty, years, initials, image, accentFrom, accentTo, clients }, i) => (
             <motion.div
               key={name}
               variants={fadeUp}
@@ -837,14 +892,25 @@ function Stylists() {
               className="group relative rounded-2xl overflow-hidden border border-zinc-800/80 hover:border-amber-500/25 bg-zinc-900 transition-all duration-300 cursor-pointer"
             >
               <div className={`relative h-52 md:h-64 bg-gradient-to-br ${accentFrom} ${accentTo} overflow-hidden`}>
-                <div className="absolute inset-0 flex items-center justify-center">
+                {/* Photo — gracefully falls back to gradient+initials if image missing */}
+                <img
+                  src={image}
+                  alt={name}
+                  className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                  onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }}
+                />
+                {/* Fallback initials (hidden when image loads) */}
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                   <span className="text-7xl md:text-8xl font-black text-white/10 select-none font-serif">
                     {initials}
                   </span>
                 </div>
-                <div className="absolute inset-0 bg-gradient-to-t from-zinc-900/50 via-transparent to-transparent" />
-                <div className="absolute inset-0 bg-amber-500/0 group-hover:bg-amber-500/7 transition-all duration-300" />
-                <div className="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-black/40 backdrop-blur-sm text-amber-400 text-[10px] font-bold tracking-wide">
+                {/* Bottom gradient for text legibility */}
+                <div className="absolute inset-0 bg-gradient-to-t from-zinc-900/70 via-transparent to-transparent" />
+                {/* Hover amber tint */}
+                <div className="absolute inset-0 bg-amber-500/0 group-hover:bg-amber-500/8 transition-all duration-400" />
+                {/* Clients badge */}
+                <div className="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-black/50 backdrop-blur-sm text-amber-400 text-[10px] font-bold tracking-wide">
                   {clients} clients
                 </div>
               </div>
@@ -974,7 +1040,7 @@ function BookingPreview() {
                 >
                   <h3 className="text-white font-bold text-lg mb-5">Choose Your Stylist</h3>
                   <div className="grid grid-cols-2 gap-3">
-                    {STYLISTS.map(({ name, specialty, initials, accentFrom, accentTo }) => (
+                    {STYLISTS.map(({ name, specialty, initials, image, accentFrom, accentTo }) => (
                       <motion.button
                         key={name}
                         whileHover={{ scale: 1.02 }}
@@ -986,8 +1052,14 @@ function BookingPreview() {
                             : "border-zinc-700/60 bg-zinc-800/50 hover:border-zinc-600"
                         }`}
                       >
-                        <div className={`w-10 h-10 rounded-full bg-gradient-to-br ${accentFrom} ${accentTo} flex items-center justify-center text-xs font-bold text-white shrink-0`}>
-                          {initials}
+                        <div className={`relative w-10 h-10 rounded-full bg-gradient-to-br ${accentFrom} ${accentTo} flex items-center justify-center text-xs font-bold text-white shrink-0 overflow-hidden`}>
+                          <span className="relative z-0 text-xs font-bold">{initials}</span>
+                          <img
+                            src={image}
+                            alt={name}
+                            className="absolute inset-0 w-full h-full object-cover object-top z-10"
+                            onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }}
+                          />
                         </div>
                         <div>
                           <div className={`font-semibold text-sm ${selections.stylist === name ? "text-amber-300" : "text-zinc-200"}`}>
