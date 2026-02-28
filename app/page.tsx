@@ -97,7 +97,6 @@ const STYLISTS = [
     specialty: "Master Barber",
     years: 12,
     initials: "AO",
-    image: "/adewale.jpg",
     accentFrom: "from-amber-700",
     accentTo: "to-stone-900",
     clients: "1.2k+",
@@ -107,7 +106,6 @@ const STYLISTS = [
     specialty: "Color Specialist",
     years: 8,
     initials: "CE",
-    image: "/chioma.jpg",
     accentFrom: "from-rose-900",
     accentTo: "to-zinc-900",
     clients: "900+",
@@ -117,7 +115,6 @@ const STYLISTS = [
     specialty: "Luxury Treatments",
     years: 10,
     initials: "TB",
-    image: "/tunde.jpg",
     accentFrom: "from-teal-900",
     accentTo: "to-zinc-950",
     clients: "1.0k+",
@@ -127,7 +124,6 @@ const STYLISTS = [
     specialty: "Precision Cuts",
     years: 6,
     initials: "NA",
-    image: "/ngozi.jpg",
     accentFrom: "from-violet-900",
     accentTo: "to-zinc-900",
     clients: "800+",
@@ -704,18 +700,12 @@ function About() {
           >
             <div className="flex items-center gap-2">
               <div className="flex -space-x-1.5">
-                {STYLISTS.slice(0, 3).map(({ initials, name, image, accentFrom, accentTo }, i) => (
+                {STYLISTS.slice(0, 3).map(({ initials, accentFrom, accentTo }, i) => (
                   <div
                     key={i}
-                    className={`w-7 h-7 rounded-full bg-gradient-to-br ${accentFrom} ${accentTo} border-2 border-zinc-900 flex items-center justify-center text-[9px] font-bold text-white overflow-hidden relative`}
+                    className={`w-7 h-7 rounded-full bg-gradient-to-br ${accentFrom} ${accentTo} border-2 border-zinc-900 flex items-center justify-center text-[9px] font-bold text-white`}
                   >
-                    <img
-                      src={image}
-                      alt={name}
-                      className="absolute inset-0 w-full h-full object-cover object-top"
-                      onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }}
-                    />
-                    <span className="relative z-10 text-[9px] font-bold">{initials}</span>
+                    {initials}
                   </div>
                 ))}
               </div>
@@ -883,7 +873,7 @@ function Stylists() {
         </div>
 
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6">
-          {STYLISTS.map(({ name, specialty, years, initials, image, accentFrom, accentTo, clients }, i) => (
+          {STYLISTS.map(({ name, specialty, years, initials, accentFrom, accentTo, clients }, i) => (
             <motion.div
               key={name}
               variants={fadeUp}
@@ -892,23 +882,26 @@ function Stylists() {
               className="group relative rounded-2xl overflow-hidden border border-zinc-800/80 hover:border-amber-500/25 bg-zinc-900 transition-all duration-300 cursor-pointer"
             >
               <div className={`relative h-52 md:h-64 bg-gradient-to-br ${accentFrom} ${accentTo} overflow-hidden`}>
-                {/* Photo — gracefully falls back to gradient+initials if image missing */}
-                <img
-                  src={image}
-                  alt={name}
-                  className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
-                  onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }}
-                />
-                {/* Fallback initials (hidden when image loads) */}
-                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                  <span className="text-7xl md:text-8xl font-black text-white/10 select-none font-serif">
+                {/* Decorative pattern behind initials */}
+                <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_50%,rgba(255,255,255,0.04),transparent)]" />
+                {/* Large initials as visual identity */}
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <span className="text-[6rem] md:text-[7rem] font-black text-white/[0.12] select-none font-serif leading-none tracking-tighter">
                     {initials}
                   </span>
                 </div>
+                {/* Smaller styled initials badge — centered, prominent */}
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="w-20 h-20 rounded-full border-2 border-white/20 bg-white/10 backdrop-blur-sm flex items-center justify-center shadow-xl">
+                    <span className="text-2xl font-black text-white font-serif tracking-tight">
+                      {initials}
+                    </span>
+                  </div>
+                </div>
                 {/* Bottom gradient for text legibility */}
-                <div className="absolute inset-0 bg-gradient-to-t from-zinc-900/70 via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-zinc-900/80 via-transparent to-transparent" />
                 {/* Hover amber tint */}
-                <div className="absolute inset-0 bg-amber-500/0 group-hover:bg-amber-500/8 transition-all duration-400" />
+                <div className="absolute inset-0 bg-amber-500/0 group-hover:bg-amber-500/8 transition-all duration-300" />
                 {/* Clients badge */}
                 <div className="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-black/50 backdrop-blur-sm text-amber-400 text-[10px] font-bold tracking-wide">
                   {clients} clients
@@ -1040,7 +1033,7 @@ function BookingPreview() {
                 >
                   <h3 className="text-white font-bold text-lg mb-5">Choose Your Stylist</h3>
                   <div className="grid grid-cols-2 gap-3">
-                    {STYLISTS.map(({ name, specialty, initials, image, accentFrom, accentTo }) => (
+                    {STYLISTS.map(({ name, specialty, initials, accentFrom, accentTo }) => (
                       <motion.button
                         key={name}
                         whileHover={{ scale: 1.02 }}
@@ -1052,14 +1045,8 @@ function BookingPreview() {
                             : "border-zinc-700/60 bg-zinc-800/50 hover:border-zinc-600"
                         }`}
                       >
-                        <div className={`relative w-10 h-10 rounded-full bg-gradient-to-br ${accentFrom} ${accentTo} flex items-center justify-center text-xs font-bold text-white shrink-0 overflow-hidden`}>
-                          <span className="relative z-0 text-xs font-bold">{initials}</span>
-                          <img
-                            src={image}
-                            alt={name}
-                            className="absolute inset-0 w-full h-full object-cover object-top z-10"
-                            onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }}
-                          />
+                        <div className={`w-10 h-10 rounded-full bg-gradient-to-br ${accentFrom} ${accentTo} flex items-center justify-center text-xs font-bold text-white shrink-0`}>
+                          {initials}
                         </div>
                         <div>
                           <div className={`font-semibold text-sm ${selections.stylist === name ? "text-amber-300" : "text-zinc-200"}`}>
