@@ -32,10 +32,13 @@ import {
   ArrowRight,
   Menu,
   X,
+  User,
   Gem,
   Quote,
   ChevronDown,
 } from "lucide-react";
+import { createClient } from "@/lib/supabase";
+import type { User as SupabaseUser } from "@supabase/supabase-js";
 
 // ─────────────────────────────────────────────────────────────
 // DATA LAYER
@@ -254,11 +257,23 @@ function Heading({ children, className = "" }: { children: React.ReactNode; clas
 function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [user, setUser] = useState<SupabaseUser | null>(null);
+  const supabase = createClient();
 
   useEffect(() => {
     const fn = () => setScrolled(window.scrollY > 30);
     window.addEventListener("scroll", fn, { passive: true });
-    return () => window.removeEventListener("scroll", fn);
+
+    // Check auth state
+    supabase.auth.getUser().then(({ data: { user } }) => setUser(user));
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_e, session) => {
+      setUser(session?.user ?? null);
+    });
+
+    return () => {
+      window.removeEventListener("scroll", fn);
+      subscription.unsubscribe();
+    };
   }, []);
 
   return (
@@ -298,15 +313,33 @@ function Navbar() {
                 <span className="absolute -bottom-1 left-0 w-0 h-px bg-amber-400 group-hover:w-full transition-all duration-300" />
               </a>
             ))}
-            <motion.a
-              href="#booking"
-              whileHover={{ scale: 1.04, boxShadow: "0 0 30px rgba(245,158,11,0.35)" }}
-              whileTap={{ scale: 0.97 }}
-              className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-amber-500 text-zinc-950 font-bold text-sm tracking-wide shadow-lg shadow-amber-500/20 hover:bg-amber-400 transition-colors"
-            >
-              <Calendar className="w-4 h-4" />
-              Book Appointment
-            </motion.a>
+            {user ? (
+              <div className="flex items-center gap-3">
+                <a href="/dashboard" className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-zinc-800 border border-zinc-700/60 text-zinc-300 hover:border-amber-500/40 hover:text-amber-400 text-sm font-medium transition-all">
+                  <User className="w-3.5 h-3.5 text-amber-400" />
+                  <span className="max-w-[100px] truncate text-xs">{user.user_metadata?.full_name?.split(" ")[0] || "Account"}</span>
+                </a>
+                <motion.a
+                  href="/book"
+                  whileHover={{ scale: 1.04, boxShadow: "0 0 30px rgba(245,158,11,0.35)" }}
+                  whileTap={{ scale: 0.97 }}
+                  className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-amber-500 text-zinc-950 font-bold text-sm tracking-wide shadow-lg shadow-amber-500/20 hover:bg-amber-400 transition-colors"
+                >
+                  <Calendar className="w-4 h-4" />
+                  Book Now
+                </motion.a>
+              </div>
+            ) : (
+              <motion.a
+                href="/book"
+                whileHover={{ scale: 1.04, boxShadow: "0 0 30px rgba(245,158,11,0.35)" }}
+                whileTap={{ scale: 0.97 }}
+                className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-amber-500 text-zinc-950 font-bold text-sm tracking-wide shadow-lg shadow-amber-500/20 hover:bg-amber-400 transition-colors"
+              >
+                <Calendar className="w-4 h-4" />
+                Book Appointment
+              </motion.a>
+            )}
           </div>
 
           <motion.button
@@ -368,7 +401,7 @@ function Hero() {
   const contentOpacity = useTransform(scrollY, [0, 380], [1, 0]);
 
   return (
-    <section className="relative h-screen min-h-[720px] overflow-hidden flex items-center justify-center pt-12">
+    <section className="relative h-screen min-h-[720px] overflow-hidden flex items-center justify-center">
       {/* Parallax background layer */}
       <motion.div style={{ y: bgY }} className="absolute inset-0 scale-[1.15]">
         {/* Hero photo — place /public/hero.jpg (barber at work) */}
@@ -763,7 +796,7 @@ function About() {
           <motion.a
             variants={fadeUp}
             custom={6}
-            href="#booking"
+            href="/about"
             whileHover={{ scale: 1.03, boxShadow: "0 0 25px rgba(245,158,11,0.18)" }}
             whileTap={{ scale: 0.97 }}
             className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full border border-zinc-700 text-zinc-300 font-semibold text-sm hover:border-amber-500/60 hover:text-amber-400 hover:bg-amber-500/5 transition-all duration-200 mt-8"
@@ -840,7 +873,7 @@ function FeaturedServices() {
 
         <motion.div variants={fadeUp} custom={5} className="text-center mt-12">
           <motion.a
-            href="#booking"
+            href="/services"
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
             className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full border border-zinc-700/60 text-zinc-400 font-semibold text-sm hover:border-amber-500/50 hover:text-amber-400 transition-all duration-200"
@@ -919,13 +952,14 @@ function Stylists() {
                   </div>
                   <span className="text-zinc-600 text-xs">{years}y exp.</span>
                 </div>
-                <motion.button
+                <motion.a
+                  href={`/book?stylist=${encodeURIComponent(name)}&step=0`}
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}
-                  className="mt-4 w-full py-2.5 rounded-xl border border-zinc-700/60 text-zinc-400 text-xs font-semibold tracking-wide group-hover:border-amber-500/40 group-hover:text-amber-400 transition-all duration-200"
+                  className="mt-4 block text-center w-full py-2.5 rounded-xl border border-zinc-700/60 text-zinc-400 text-xs font-semibold tracking-wide group-hover:border-amber-500/40 group-hover:text-amber-400 transition-all duration-200"
                 >
                   Book with {name.split(" ")[0]}
-                </motion.button>
+                </motion.a>
               </div>
             </motion.div>
           ))}
@@ -1359,15 +1393,21 @@ function Footer() {
           <div>
             <h4 className="text-white font-bold text-sm mb-5 tracking-wide uppercase">Quick Links</h4>
             <div className="grid grid-cols-2 gap-x-4 gap-y-3">
-              {["Services", "Our Stylists", "Book Now", "Gallery", "About Us", "Contact", "Careers", "Gift Cards"].map(
-                (link) => (
-                  <a
-                    key={link}
-                    href="#"
+              {[
+                { label: "Services", href: "/services" },
+                { label: "Our Stylists", href: "/stylists" },
+                { label: "Book Now", href: "/book" },
+                { label: "Gallery", href: "/gallery" },
+                { label: "About Us", href: "/about" },
+                { label: "Contact", href: "/contact" },
+                { label: "Careers", href: "#" },
+                { label: "Gift Cards", href: "#" },
+              ].map(({ label, href }) => (
+                  <a key={label} href={href}
                     className="text-zinc-600 hover:text-amber-400 text-sm transition-colors duration-200 flex items-center gap-1.5 group"
                   >
                     <ChevronRight className="w-3 h-3 text-zinc-800 group-hover:text-amber-500/60 transition-colors" />
-                    {link}
+                    {label}
                   </a>
                 )
               )}
@@ -1378,9 +1418,9 @@ function Footer() {
         <div className="pt-8 border-t border-zinc-800/60 flex flex-col md:flex-row items-center justify-between gap-3">
           <p className="text-zinc-700 text-xs">© 2026 Hairxpert Luxury Salon. All rights reserved.</p>
           <div className="flex items-center gap-4">
-            {["Privacy Policy", "Terms of Service"].map((item) => (
-              <a key={item} href="#" className="text-zinc-700 hover:text-zinc-500 text-xs transition-colors">
-                {item}
+            {[{label:"Privacy Policy",href:"/privacy"},{label:"Terms of Service",href:"/terms"}].map(({label,href}) => (
+              <a key={label} href={href} className="text-zinc-700 hover:text-zinc-500 text-xs transition-colors">
+                {label}
               </a>
             ))}
           </div>
