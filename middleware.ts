@@ -28,8 +28,11 @@ export async function middleware(request: NextRequest) {
   // Refresh session — required for SSR auth
   const { data: { user } } = await supabase.auth.getUser();
 
-  // Protect /dashboard — redirect to auth if not logged in
-  if (!user && request.nextUrl.pathname.startsWith("/dashboard")) {
+  // Protect /dashboard and /admin — redirect to auth if not logged in
+  const protectedPaths = ["/dashboard", "/admin"];
+  const isProtected = protectedPaths.some(p => request.nextUrl.pathname.startsWith(p));
+
+  if (!user && isProtected) {
     const url = request.nextUrl.clone();
     url.pathname = "/auth";
     return NextResponse.redirect(url);
