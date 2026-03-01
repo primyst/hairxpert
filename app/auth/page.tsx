@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { Scissors, Star, Chrome, Loader2, AlertCircle } from "lucide-react";
@@ -9,7 +9,7 @@ import { createClient } from "@/lib/supabase";
 type EaseCubicBezier = [number, number, number, number];
 const EASE_OUT: EaseCubicBezier = [0.16, 1, 0.3, 1];
 
-export default function AuthPage() {
+function AuthInner() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const supabase = createClient();
@@ -194,3 +194,17 @@ export default function AuthPage() {
     </div>
   );
 }
+
+// Wrap in Suspense so useSearchParams() doesn't break static prerendering
+export default function AuthPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-zinc-950 flex items-center justify-center">
+        <div className="w-8 h-8 rounded-full border-2 border-amber-500/30 border-t-amber-500 animate-spin" />
+      </div>
+    }>
+      <AuthInner />
+    </Suspense>
+  );
+}
+
