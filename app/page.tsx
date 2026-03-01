@@ -375,7 +375,7 @@ function Navbar() {
                 </a>
               ))}
               <a
-                href="#booking"
+                href="/booking"
                 onClick={() => setMenuOpen(false)}
                 className="mt-5 flex items-center justify-center gap-2 py-4 rounded-full bg-amber-500 text-zinc-950 font-bold text-sm tracking-wide"
               >
@@ -508,7 +508,7 @@ function Hero() {
           className="flex flex-col sm:flex-row gap-4 justify-center items-center"
         >
           <motion.a
-            href="#booking"
+            href="/booking"
             whileHover={{ scale: 1.05, boxShadow: "0 0 50px rgba(245,158,11,0.45)" }}
             whileTap={{ scale: 0.96 }}
             className="group flex items-center gap-3 px-8 py-4 rounded-full bg-amber-500 text-zinc-950 font-black text-base tracking-wide shadow-xl shadow-amber-500/25 transition-all duration-200"
@@ -524,7 +524,7 @@ function Hero() {
           </motion.a>
 
           <motion.a
-            href="#services"
+            href="/services"
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
             className="flex items-center gap-2 px-8 py-4 rounded-full border border-zinc-600/80 text-zinc-300 font-medium text-base tracking-wide hover:border-amber-500/50 hover:text-amber-400 hover:bg-amber-500/5 transition-all duration-200"
@@ -1293,7 +1293,7 @@ function FinalCTA() {
 
         <motion.div variants={fadeUp} custom={3} className="flex flex-col sm:flex-row gap-4 justify-center">
           <motion.a
-            href="#booking"
+            href="/booking"
             whileHover={{ scale: 1.06, boxShadow: "0 0 60px rgba(245,158,11,0.5)" }}
             whileTap={{ scale: 0.97 }}
             className="inline-flex items-center justify-center gap-3 px-10 py-5 rounded-full bg-amber-500 text-zinc-950 font-black text-lg tracking-wide shadow-2xl shadow-amber-500/30 transition-all duration-200"
