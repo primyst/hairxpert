@@ -23,7 +23,8 @@
     "@vercel/analytics": "^1.0.0",
     "react-icons": "^4.12.0",
     "@supabase/ssr": "^0.8.0",
-    "framer-motion": "^12.9.4"
+    "framer-motion": "^12.9.4",
+    "resend": "^6.5.2"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
