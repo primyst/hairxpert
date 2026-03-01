@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { motion, AnimatePresence, type Variants } from "framer-motion";
 import {
@@ -30,7 +30,7 @@ const fadeSlide: Variants = {
   exit: { opacity: 0, x: -20, transition: { duration: 0.2 } },
 };
 
-export default function BookPage() {
+function BookInner() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const supabase = createClient();
@@ -470,6 +470,20 @@ export default function BookPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+
+// Wrap in Suspense — useSearchParams() requires this for static export
+export default function BookPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-zinc-950 flex items-center justify-center">
+        <div className="w-8 h-8 rounded-full border-2 border-amber-500/30 border-t-amber-500 animate-spin" />
+      </div>
+    }>
+      <BookInner />
+    </Suspense>
   );
 }
 
