@@ -1,0 +1,111 @@
+import { Scissors, Wind, Palette, Gem, Sparkles, Dumbbell } from "lucide-react";
+import type { Stylist, Service } from "@/types";
+
+export const SERVICES: (Service & { icon: typeof Scissors })[] = [
+  {
+    slug: "signature-haircut",
+    name: "Signature Haircut",
+    price: "₦15,000",
+    duration: "45 mins",
+    icon: Scissors,
+    description: "Precision tailored to your face structure and personal style vision.",
+    tag: "Most Popular",
+  },
+  {
+    slug: "beard-sculpt",
+    name: "Beard Sculpt & Shave",
+    price: "₦8,000",
+    duration: "30 mins",
+    icon: Wind,
+    description: "Expert shaping, hot-towel shave and beard conditioning ritual.",
+    tag: null,
+  },
+  {
+    slug: "luxury-hair-color",
+    name: "Luxury Hair Color",
+    price: "₦25,000",
+    duration: "90 mins",
+    icon: Palette,
+    description: "From bold statements to natural balayage — your canvas awaits.",
+    tag: "Premium",
+  },
+  {
+    slug: "royal-treatment",
+    name: "Royal Treatment",
+    price: "₦35,000",
+    duration: "120 mins",
+    icon: Gem,
+    description: "The full Hairxpert experience: cut, color, treatment and massage.",
+    tag: "Exclusive",
+  },
+  {
+    slug: "luxury-treatments",
+    name: "Luxury Treatments",
+    price: "₦18,000",
+    duration: "60 mins",
+    icon: Sparkles,
+    description: "Deep conditioning, scalp revival and hair repair rituals.",
+    tag: null,
+  },
+  {
+    slug: "body-massage",
+    name: "Body Massage",
+    price: "₦20,000",
+    duration: "60 mins",
+    icon: Dumbbell,
+    description: "Full-body relaxation and muscle recovery by expert therapists.",
+    tag: null,
+  },
+];
+
+export const STYLISTS: Stylist[] = [
+  {
+    slug: "adewale-obi",
+    name: "Adewale Obi",
+    specialty: "Master Barber",
+    years: 12,
+    initials: "AO",
+    accentFrom: "from-amber-700",
+    accentTo: "to-stone-900",
+    clients: "1.2k+",
+  },
+  {
+    slug: "chioma-eze",
+    name: "Chioma Eze",
+    specialty: "Color Specialist",
+    years: 8,
+    initials: "CE",
+    accentFrom: "from-rose-900",
+    accentTo: "to-zinc-900",
+    clients: "900+",
+  },
+  {
+    slug: "tunde-bello",
+    name: "Tunde Bello",
+    specialty: "Luxury Treatments",
+    years: 10,
+    initials: "TB",
+    accentFrom: "from-teal-900",
+    accentTo: "to-zinc-950",
+    clients: "1.0k+",
+  },
+  {
+    slug: "ngozi-amara",
+    name: "Ngozi Amara",
+    specialty: "Precision Cuts",
+    years: 6,
+    initials: "NA",
+    accentFrom: "from-violet-900",
+    accentTo: "to-zinc-900",
+    clients: "800+",
+  },
+];
+
+export const AVAILABLE_SLOTS = [
+  "Monday, Mar 3 · 10:00 AM",
+  "Monday, Mar 3 · 2:00 PM",
+  "Tuesday, Mar 4 · 11:00 AM",
+  "Tuesday, Mar 4 · 3:30 PM",
+  "Wednesday, Mar 5 · 9:00 AM",
+  "Wednesday, Mar 5 · 4:00 PM",
+];
